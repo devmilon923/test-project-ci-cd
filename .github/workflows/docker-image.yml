@@ -15,8 +15,8 @@ jobs:
 
       - name: Login to Docker
         env:
-          DU: ${{ secrets.DOCKER_USERNAME }}
-          DP: ${{ secrets.DOCKER_PASSWORD }}
+          DU: ${{ test.DOCKER_USERNAME }}
+          DP: ${{ test.DOCKER_PASSWORD }}
         run: echo $DP | docker login -u $DU --password-stdin
 
       - name: Build Docker Image
