@@ -1,10 +1,10 @@
 FROM node:18-alpine
-RUN apt-get update && apt-get install -y npm
+RUN apt-get update && apt-get install -y
 RUN apt-get upgrade -y
 
 WORKDIR /app
 
-COPY package*.json .
+COPY package*.json ./
 RUN npm install
 COPY . .
 
