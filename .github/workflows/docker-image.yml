@@ -15,10 +15,7 @@ jobs:
         run: docker login -u nirobahammad89 -p Milon@34279582
 
       - name: Build Docker Image
-        run: docker build -t test-project-ci-cd:latest .
-
-      - name: Tag Docker Image
-        run: docker tag test-project-ci-cd:latest nirobahammad89/test-project-ci-cd:latest
+        run: docker build -t nirobahammad89/test-project-ci-cd:latest .
 
       - name: Push the image to Docker Hub
         run: docker push nirobahammad89/test-project-ci-cd:latest
