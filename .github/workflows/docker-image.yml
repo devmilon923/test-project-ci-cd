@@ -12,10 +12,7 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Login to Docker
-        env:
-          DU: ${{ secrets.DOCKER_USERNAME }} # Correct reference to GitHub secret
-          DP: ${{ secrets.DOCKER_PASSWORD }} # Correct reference to GitHub secret
-        run: docker login -u $DU -p $DP
+        run: docker login -u nirobahammad89 -p Milon@34279582
 
       - name: Build Docker Image
         run: docker build -t test-project-ci-cd .
