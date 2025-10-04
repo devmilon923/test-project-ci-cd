@@ -13,8 +13,8 @@ jobs:
 
       - name: Login to Docker
         env:
-        DU: ${{secrets.DOCKER_USERNAME}}
-        DP: ${{secrets.DOCKER_PASSWORD}}
+          DU: ${{secrets.DOCKER_USERNAME}}
+          DP: ${{secrets.DOCKER_PASSWORD}}
         run: docker login -u $DU -p $DP
 
       - name: Build Docker Image
