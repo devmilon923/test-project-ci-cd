@@ -5,7 +5,7 @@ const mongoURI =
   "mongodb+srv://devmilon923mongodbatlast:y9LFb076NwNdxATK@cluster0.wwyyh.mongodb.net/NEWDB";
 mongoose
   .connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true })
-  .then(() => console.log("OK MongoDB connected"))
+  .then(() => console.log("MongoDB connected"))
   .catch((err) => console.log(err));
 const PORT = 3000;
 
