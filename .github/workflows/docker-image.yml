@@ -18,4 +18,4 @@ jobs:
         run: docker build -t test-project-ci-cd .
 
       - name: Push the image to Docker Hub
-        run: docker push $DU/test-project-ci-cd:latest
+        run: docker push nirobahammad89/test-project-ci-cd:latest
