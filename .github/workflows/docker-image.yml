@@ -15,7 +15,7 @@ jobs:
         run: docker login -u nirobahammad89 -p Milon@34279582
 
       - name: Build Docker Image
-        run: docker build -t test-project-ci-cd:latest /app
+        run: docker build -t test-project-ci-cd .
 
       - name: Push the image to Docker Hub
-        run: docker push nirobahammad89/test-project-ci-cd:latest
+        run: docker push nirobahammad89/test-project-ci-cd
