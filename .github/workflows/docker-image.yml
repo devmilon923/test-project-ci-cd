@@ -12,10 +12,13 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Login to Docker
-        run: docker login -u nirobahammad89 -p Milon@34279582
+        env:
+        DU: ${{secrets.DOCKER_USERNAME}}
+        DP: ${{secrets.DOCKER_PASSWORD}}
+        run: docker login -u $DU -p $DP
 
       - name: Build Docker Image
-        run: docker build -t nirobahammad89/test-project-ci-cd:latest .
+        run: docker build -t $DU/test-project-ci-cd:latest .
 
       - name: Push the image to Docker Hub
-        run: docker push nirobahammad89/test-project-ci-cd:latest
+        run: docker push $DU/test-project-ci-cd:latest
