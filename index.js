@@ -10,7 +10,7 @@ mongoose
 const PORT = 3000;
 
 app.get("/", (req, res) => {
-  return res.send({ message: "Hey i am from docker conatiner v1" });
+  return res.send({ message: "Hey i am from docker conatiner v2" });
 });
 
 app.listen(PORT, () => {
