@@ -15,7 +15,7 @@ jobs:
         env:
           DU: ${{ secrets.DOCKER_USERNAME }} # Correct reference to GitHub secret
           DP: ${{ secrets.DOCKER_PASSWORD }} # Correct reference to GitHub secret
-        run: echo $DP | docker login -u $DU --password-stdin
+        run: docker login -u $DU -p $DP
 
       - name: Build Docker Image
         run: docker build -t test-project-ci-cd .
