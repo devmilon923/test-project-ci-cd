@@ -1,38 +1,40 @@
-name: CI Pipeline
+name: CI Pipeline with OIDC
 on:
   push:
     branches: ["main"]
 
+# These permissions are needed to interact with GitHub's OIDC Token endpoint
+permissions:
+  id-token: write
+  contents: read
+
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Set up AWS CLI
+      # Configure AWS credentials using OIDC
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::831181103474:role/GitHubActionsRole
+          role-session-name: GitHubActions
+          aws-region: ap-south-1
+
+      # Login to Amazon ECR
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
+
+      # Build, tag, and push image to Amazon ECR
+      - name: Build, tag, and push image to Amazon ECR
+        env:
+          ECR_REGISTRY: 831181103474.dkr.ecr.ap-south-1.amazonaws.com
+          ECR_REPOSITORY: test-ecr
+          IMAGE_TAG: ${{ github.sha }}
         run: |
-          aws configure set aws_access_key_id ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws configure set aws_secret_access_key ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws configure set region ${{ secrets.AWS_REGION }}
-
-      - name: Install AWS CLI (if needed)
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y unzip
-          curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip" && \
-          unzip awscliv2.zip && \
-          sudo ./aws/install --update
-
-      - name: Login to ECR Docker
-        run: aws ecr get-login-password --region ap-south-1 | docker login --username AWS --password-stdin 831181103474.dkr.ecr.ap-south-1.amazonaws.com
-
-      - name: Build the Docker image
-        run: docker build -t test-ecr .
-
-      - name: Tag the Docker image
-        run: docker tag test-ecr:latest 831181103474.dkr.ecr.ap-south-1.amazonaws.com/test-ecr:latest
-
-      - name: Push the Docker image to ECR
-        run: docker push 831181103474.dkr.ecr.ap-south-1.amazonaws.com/test-ecr:latest
+          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:latest .
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:latest
