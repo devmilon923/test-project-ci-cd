@@ -9,7 +9,11 @@ jobs:
     steps:
       # - uses: actions/checkout@v4
       - name: Install AWS CLI
-        run: sudo apt-get install awscli
+        run:
+          curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+          unzip awscliv2.zip
+          sudo ./aws/install
+
       - name: Login to ECR Docker
         run: aws ecr get-login-password --region ap-south-1 | docker login --username AWS --password-stdin 831181103474.dkr.ecr.ap-south-1.amazonaws.com
       - name: Build the Docker image
