@@ -1,21 +1,21 @@
-# name: CD Pipeline
+name: CD Pipeline
 
-# on:
-#   workflow_run:
-#     workflows: ["CI Pipeline"] # Name of the workflow being depended on
-#     types:
-#       - completed # The type of the event when the workflow is completed
+on:
+  workflow_run:
+    workflows: ["CI Pipeline"] # Name of the workflow being depended on
+    types:
+      - completed # The type of the event when the workflow is completed
 
-# jobs:
-#   build:
-#     runs-on: self-hosted
+jobs:
+  build:
+    runs-on: self-hosted
 
-#     steps:
-#       - name: Pull the image from Docker Hub
-#         run: sudo docker pull nirobahammad89/test-project-ci-cd:latest
+    steps:
+      - name: Pull the image from Docker Hub
+        run: sudo docker pull nirobahammad89/test-project-ci-cd:latest
 
-#       - name: Remove old Docker container
-#         run: sudo docker rm -f test-project-ci-cd-container || true
+      - name: Remove old Docker container
+        run: sudo docker rm -f test-project-ci-cd-container || true
 
-#       - name: Install the new Docker image
-#         run: sudo docker run -d -p 3000:3000 --name test-project-ci-cd-container nirobahammad89/test-project-ci-cd
+      - name: Install the new Docker image
+        run: sudo docker run -d -p 3000:3000 --name test-project-ci-cd-container nirobahammad89/test-project-ci-cd
