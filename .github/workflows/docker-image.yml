@@ -10,9 +10,11 @@ jobs:
       DOCKER_PASSWORD: ${{secrets.DOCKER_PASSWORD}}
     steps:
       - uses: actions/checkout@v4
-      - name: Login to Docker
-        run: echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin
-      - name: Build Docker Image
-        run: docker build -t $DOCKER_USERNAME/test-project-ci-cd:latest .
-      - name: Push the image to Docker Hub
-        run: docker push $DOCKER_USERNAME/test-project-ci-cd:latest
+      - name: Login to ECR Docker
+        run: aws ecr get-login-password --region ap-south-1 | docker login --username AWS --password-stdin 831181103474.dkr.ecr.ap-south-1.amazonaws.com
+      - name: Build the Docker image
+        run: docker build -t test-ecr .
+      - name: After the build completes, tag your image so you can push the image to this repository
+        run: docker tag test-ecr:latest 831181103474.dkr.ecr.ap-south-1.amazonaws.com/test-ecr:latest
+      - name: Run the following command to push this image to your newly created AWS repository
+        run: docker push 831181103474.dkr.ecr.ap-south-1.amazonaws.com/test-ecr:latest
