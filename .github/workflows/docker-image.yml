@@ -2,23 +2,28 @@ name: CI Pipeline
 on:
   push:
     branches: ["main"]
+
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-      # - uses: actions/checkout@v4
       - name: Install AWS CLI
-        run:
-          curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
-          unzip awscliv2.zip
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y unzip
+          curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip" && \
+          unzip awscliv2.zip && \
           sudo ./aws/install
 
       - name: Login to ECR Docker
         run: aws ecr get-login-password --region ap-south-1 | docker login --username AWS --password-stdin 831181103474.dkr.ecr.ap-south-1.amazonaws.com
+
       - name: Build the Docker image
         run: docker build -t test-ecr .
-      - name: After the build completes, tag your image so you can push the image to this repository
+
+      - name: Tag the Docker image
         run: docker tag test-ecr:latest 831181103474.dkr.ecr.ap-south-1.amazonaws.com/test-ecr:latest
-      - name: Run the following command to push this image to your newly created AWS repository
+
+      - name: Push the Docker image to ECR
         run: docker push 831181103474.dkr.ecr.ap-south-1.amazonaws.com/test-ecr:latest
